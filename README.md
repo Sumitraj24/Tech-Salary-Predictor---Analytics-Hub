@@ -1,4 +1,4 @@
-# 💼 Tech Salary Predictor & Analytics Hub (Data Mining & Machine Learning)
+# 💼 Tech Salary Predictor & Analytics Hub
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.35%2B-FF4B4B.svg)](https://streamlit.io/)
@@ -6,7 +6,7 @@
 [![Plotly](https://img.shields.io/badge/Plotly-5.18%2B-3F4F75.svg)](https://plotly.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-An end-to-end **Data Mining and Machine Learning application** that analyzes tech compensation trends across India and predicts market salaries for tech professionals based on experience, role, target company, location, education, and skills.
+An end-to-end **Machine Learning Web Application** that analyzes tech compensation trends across India and predicts market salaries for tech professionals based on experience, role, target company, location, education, and skills.
 
 ---
 
@@ -39,12 +39,10 @@ An end-to-end **Data Mining and Machine Learning application** that analyzes tec
 ## 📁 Repository Structure
 
 ```text
-├── app.py                               # Main Streamlit web application & analytics dashboard
+├── app.py                               # Core Streamlit web application & analytics dashboard
 ├── Salary_Dataset_DataScienceLovers.csv # Primary benchmark dataset (22,770+ records)
-├── datamining_2.ipynb                   # End-to-end Data Mining, EDA & Regression notebook
-├── job_scraper_api.ipynb                # Remote tech job API scraper (RemoteOK & Remotive API)
-├── requirements.txt                     # Project dependencies
-├── .gitignore                           # Git ignore rules for clean repository
+├── requirements.txt                     # Python dependencies
+├── .gitignore                           # Git ignore rules
 └── README.md                            # Comprehensive project documentation
 ```
 
@@ -78,7 +76,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 4. Run the Streamlit Application
+### 4. Run the Application
 ```bash
 streamlit run app.py
 ```
@@ -86,7 +84,7 @@ Open your browser at `http://localhost:8501` to use the application.
 
 ---
 
-## 📊 Dataset & Data Mining Methodology
+## 📊 Dataset & Methodology
 
 - **Dataset**: `Salary_Dataset_DataScienceLovers.csv` (22,770 rows, 8 features).
 - **Features Captured**:
@@ -123,7 +121,7 @@ Open your browser at `http://localhost:8501` to use the application.
 - **Frontend / App Framework**: [Streamlit](https://streamlit.io/)
 - **Data Manipulation**: [Pandas](https://pandas.pydata.org/), [NumPy](https://numpy.org/)
 - **Machine Learning**: [Scikit-Learn](https://scikit-learn.org/)
-- **Visualizations**: [Plotly Express](https://plotly.com/python/), [Seaborn](https://seaborn.pydata.org/), [Matplotlib](https://matplotlib.org/)
+- **Visualizations**: [Plotly Express](https://plotly.com/python/)
 
 ---
 
