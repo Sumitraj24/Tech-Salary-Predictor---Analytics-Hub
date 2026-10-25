@@ -76,7 +76,7 @@ DATASET_PATH = "Salary_Dataset_DataScienceLovers.csv"
 @st.cache_data
 def load_and_preprocess_data():
     if not os.path.exists(DATASET_PATH):
-        st.error(f"Dataset `{DATASET_PATH}` was not found. Please ensure it is in the repository.")
+        st.error(f"Dataset `{DATASET_PATH}` was not found. Please ensure it is in the repository directory.")
         st.stop()
 
     df = pd.read_csv(DATASET_PATH)
@@ -292,12 +292,22 @@ with tab_predict:
         # Experience band
         exp_band = int(pd.cut([experience], bins=[-1, 1, 3, 6, 10, 15, 35], labels=[0, 1, 2, 3, 4, 5])[0])
         
-        # Encoders
+        # Safe Encoders with fallback
         loc_clean = location.strip().lower()
-        loc_code = le_loc.transform([loc_clean])[0] if loc_clean in le_loc.classes_ else le_loc.transform(['other'])[0]
+        if loc_clean in le_loc.classes_:
+            loc_code = le_loc.transform([loc_clean])[0]
+        elif 'other' in le_loc.classes_:
+            loc_code = le_loc.transform(['other'])[0]
+        else:
+            loc_code = 0
 
         role_clean = role.strip().lower()
-        role_code = le_role.transform([role_clean])[0] if role_clean in le_role.classes_ else le_role.transform(['other'])[0]
+        if role_clean in le_role.classes_:
+            role_code = le_role.transform([role_clean])[0]
+        elif 'other' in le_role.classes_:
+            role_code = le_role.transform(['other'])[0]
+        else:
+            role_code = 0
 
         # Company Tier calculation
         co_clean = company_input.strip().lower() if company_input else ""
@@ -355,7 +365,8 @@ with tab_predict:
         next_exp = min(experience + 2, 25)
         next_band = int(pd.cut([next_exp], bins=[-1, 1, 3, 6, 10, 15, 35], labels=[0, 1, 2, 3, 4, 5])[0])
         next_input = pd.DataFrame([[next_exp, next_band, loc_code, role_code, company_tier, min(skill_count + 2, 20)]], columns=FEATURES)
-        next_pred = round(max(1.5, float(model.predict(next_input)[0]) * edu_mult), 2)
+        raw_next_pred = float(model.predict(next_input)[0]) * edu_mult
+        next_pred = round(max(pred * 1.08, raw_next_pred), 2)
         growth_pct = round(((next_pred - pred) / pred) * 100, 1)
 
         st.info(f"📈 **Career Trajectory Forecast:** In 2 years (at **{next_exp} yrs experience**), your estimated market value could rise to **₹ {next_pred} LPA** (+{growth_pct}% growth).")
@@ -403,6 +414,7 @@ with tab_analytics:
         # Median Salary by Location
         top_locs = df[df['location'] != 'other']['location'].value_counts().head(8).index
         loc_df = df[df['location'].isin(top_locs)].groupby('location')['salary'].median().reset_index().sort_values(by='salary', ascending=True)
+        loc_df['location'] = loc_df['location'].str.title()
         fig_loc = px.bar(
             loc_df,
             x="salary",
@@ -420,6 +432,7 @@ with tab_analytics:
         # Salary by Job Role
         top_roles = df[df['job_title'] != 'other']['job_title'].value_counts().head(8).index
         role_df = df[df['job_title'].isin(top_roles)].groupby('job_title')['salary'].median().reset_index().sort_values(by='salary', ascending=True)
+        role_df['job_title'] = role_df['job_title'].str.title()
         fig_role = px.bar(
             role_df,
             x="salary",
@@ -459,12 +472,12 @@ with tab_model:
         st.markdown("#### Model Architecture")
         st.table(pd.DataFrame({
             "Hyperparameter": ["Estimator", "n_estimators", "max_depth", "min_samples_leaf", "Test Split", "R² Score", "MAE"],
-            "Value": ["RandomForestRegressor", "150", "12", "5", "20%", f"{r2}%", f"±{mae} LPA"]
+            "Specification": ["RandomForestRegressor", "150", "12", "5", "20%", f"{r2}%", f"±{mae} LPA"]
         }))
 
         st.markdown("#### Data Mining Methodology")
         st.write("""
-        1. **Data Cleaning & Normalization:** Parsed compensation data from tech compensation datasets, converted INR to LPA, and applied boundary filtering (1.0 to 75.0 LPA).
+        1. **Data Cleaning & Normalization:** Parsed compensation data from tech compensation benchmarks, converted INR to LPA, and filtered outliers (1.0 to 75.0 LPA).
         2. **Seniority & Experience Mining:** Imputed experience profiles from job titles and seniority designations (Intern, Junior, Senior, Staff, Architect).
         3. **Categorical Encoding & Tiering:** Derived smoothed company compensation tiers and encoded locations.
         4. **Validation:** 80/20 train/test split with MAE and R² evaluation.

@@ -40,11 +40,9 @@ An end-to-end **Data Mining and Machine Learning application** that analyzes tec
 
 ```text
 ├── app.py                               # Main Streamlit web application & analytics dashboard
-├── app1.py                              # Lightweight / minimal salary predictor app
 ├── Salary_Dataset_DataScienceLovers.csv # Primary benchmark dataset (22,770+ records)
-├── datamining_1.ipynb                   # Notebook 1: Data cleaning & preprocessing pipeline
-├── datamining_2.ipynb                   # Notebook 2: Exploratory data analysis & baseline regression
-├── job_scraper_api.ipynb                # Notebook 3: Remote tech job scraper (RemoteOK & Remotive API)
+├── datamining_2.ipynb                   # End-to-end Data Mining, EDA & Regression notebook
+├── job_scraper_api.ipynb                # Remote tech job API scraper (RemoteOK & Remotive API)
 ├── requirements.txt                     # Project dependencies
 ├── .gitignore                           # Git ignore rules for clean repository
 └── README.md                            # Comprehensive project documentation
@@ -60,8 +58,8 @@ An end-to-end **Data Mining and Machine Learning application** that analyzes tec
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/<your-username>/data-mining-salary-predictor.git
-cd data-mining-salary-predictor
+git clone https://github.com/Sumitraj24/tech-salary-predictor.git
+cd tech-salary-predictor
 ```
 
 ### 2. Create and Activate Virtual Environment
@@ -85,11 +83,6 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 Open your browser at `http://localhost:8501` to use the application.
-
-*To run the lightweight version instead:*
-```bash
-streamlit run app1.py
-```
 
 ---
 
